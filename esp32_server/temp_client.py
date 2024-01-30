@@ -19,7 +19,7 @@ _ENV_SENSE_TEMP_UUID = bluetooth.UUID(0x2A6E)
 
 # Helper to decode the temperature characteristic encoding (sint16, hundredths of a degree).
 def _decode_temperature(data):
-    return struct.unpack("<h", data)[0] / 100
+    return struct.unpack("<20s", data)[0]
 
 
 async def find_temp_sensor():
@@ -56,8 +56,8 @@ async def main():
 
         while True:
             temp_deg_c = _decode_temperature(await temp_characteristic.read())
-            print("Temperature: {:.2f}".format(temp_deg_c))
-            await asyncio.sleep_ms(1000)
+            print("Temperature: {}".format(temp_deg_c))
+            await asyncio.sleep_ms(1)
 
 
 asyncio.run(main())
