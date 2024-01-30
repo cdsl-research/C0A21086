@@ -7,17 +7,7 @@ import socket
 import network
 
 import time
-'''
-from machine import Pin, I2C
-from ina219 import INA219
-from logging import INFO
 
-SHUNT_OHMS = 0.1
-
-i2c = I2C(-1, scl=Pin(22), sda=Pin(21))
-ina = INA219(SHUNT_OHMS, i2c, log_level=INFO)
-ina.configure()
-'''
 wifi = network.WLAN(network.STA_IF)
 wifi.active(True)
 
@@ -63,36 +53,15 @@ port = 80 #ポート指定
 
 s.connect(socket.getaddrinfo(host, port)[0][-1]) #接続確立
 
-#f = open("30KB.txt", "r", encoding="utf-8")
+f = open("data.txt", "r", encoding="utf-8")
 text = "a"
-'''
-g = open("el.txt", "w", encoding="utf-8")
-g.write(" ")
-g.close()
-'''
+
 if __name__ == '__main__':
     start = time.time()
-    #while (True):
-    for i in range(489):
-        text = "a"*1024
-        #print(text)
-        #msg = input(text) 
-        #end = time.time()
+    while (text != ""):    
+        text = f.read(1024)
+        msg = input(text) 
         try:
             s.sendall(text) #入力された文字列を送信
-            #g = open("el.txt", "a", encoding="utf-8")
-            #g.write("Bus Voltage: %.3f V\n" % ina.voltage())
-            #g.write("Current: %.3f mA\n" % ina.current())
-            #g.write("Power: %.3f mW\n" % ina.power())
-            #g.close()
-            #end = time.time_ns()
-            #print(end - start)
         except OSError as e:
-            #f.close()
-            #f = open("time.txt", "w", encoding="utf-8")
-            #f.write(str(end - start))
-            #f.close()
-            end = time.time()
-            print(end - start)
-    end = time.time()
-    print(end - start)
+            f.close()
