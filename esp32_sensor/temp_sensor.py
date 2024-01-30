@@ -12,17 +12,7 @@ import random
 import struct
 
 import time
-'''
-from machine import Pin, I2C
-from ina219 import INA219
-from logging import INFO
 
-SHUNT_OHMS = 0.1
-
-i2c = I2C(-1, scl=Pin(22), sda=Pin(21))
-ina = INA219(SHUNT_OHMS, i2c, log_level=INFO)
-ina.configure()
-'''
 # org.bluetooth.service.environmental_sensing
 _ENV_SENSE_UUID = bluetooth.UUID(0x181A)
 # org.bluetooth.characteristic.temperature
@@ -49,23 +39,13 @@ def _encode_temperature(temp_deg_c):
 
 # This would be periodically polling a hardware sensor.
 async def sensor_task():
-    #f = open("30KB.txt", "r", encoding="utf-8")
+    f = open("data.txt", "r", encoding="utf-8")
     text = "a"
-    start = time.time()
-    #while (text != ""):
-    #while (True):
-    for i in range(25000):
-        #text = f.read(20)
-        text = "a"*20
+    while (text != "")
+        text = f.read(20)
         temp_characteristic.write(_encode_temperature(text))
-        #end = time.time()
-        #print(end - start)
         await asyncio.sleep_ms(1)
-        text = " "*20
-    #f.close()
-    text = " "*20
-    end = time.time()
-    print(end - start)
+    f.close()
 
 # Serially wait for connections. Don't advertise while a central is
 # connected.
@@ -79,27 +59,12 @@ async def peripheral_task():
         ) as connection:
             print("Connection from", connection.device)
             await connection.disconnected()
-'''
-async def elec():
-    g = open("elec.txt", "w", encoding="utf-8")
-    g.write(" ")
-    g.close()
-    
-    while True:
-        g = open("elec.txt", "a", encoding="utf-8")
-        g.write("Bus Voltage: %.3f V\n" % ina.voltage())
-        g.write("Current: %.3f mA\n" % ina.current())
-        g.write("Power: %.3f mW\n" % ina.power())
-        g.close()
-'''
 
 # Run both tasks.
 async def main():
     t1 = asyncio.create_task(sensor_task())
     t2 = asyncio.create_task(peripheral_task())
-    #t3 = asyncio.create_task(elec())
     await asyncio.gather(t1, t2)
-    #await asyncio.gather(t1, t2, t3)
     
 
 asyncio.run(main())
