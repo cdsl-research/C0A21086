@@ -13,10 +13,6 @@ i2c = I2C(-1, scl=Pin(22), sda=Pin(21))
 ina = INA219(SHUNT_OHMS, i2c, log_level=INFO)
 ina.configure()
 
-# f = open('osawa.csv', 'a')
-# f.write("start")
-# f.write("\n")
-
 def write():
     with open("current.log","a") as f:
         for i in range(100):
